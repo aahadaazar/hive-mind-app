@@ -1,0 +1,363 @@
+// Variables
+$sidebar-width: 260px;
+$sidebar-bg: #1e1e1e; // Dark gray/black
+$sidebar-text: #e0e0e0;
+$sidebar-text-muted: #a0a0a0;
+$primary-color: #4a9d9c; // Teal/Greenish from button
+$input-bg: #2b2b2b;
+$input-border: #3e3e3e;
+$text-color: #ffffff;
+$font-family: 'Inter', sans-serif; // Assuming Inter or similar
+
+// Mixins/Placeholders
+%flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+%flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: $font-family;
+  background-color: #000;
+  color: $text-color;
+
+  .sidebar {
+    width: $sidebar-width;
+    background-color: $sidebar-bg;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 1px solid #333;
+    flex-shrink: 0;
+    transition: width 0.3s ease;
+
+    &.collapsed {
+      width: 80px;
+      align-items: center;
+
+      .header {
+        justify-content: center;
+        flex-direction: column; // Keep it simple, just center the logo
+        gap: 0;
+        
+        .logo {
+          margin-bottom: 0;
+        }
+      }
+
+      .nav {
+        align-items: center;
+        
+        .navItem {
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          padding: 0;
+        }
+      }
+
+      .userProfile {
+        justify-content: center;
+        
+        .userName {
+          display: none;
+        }
+      }
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+
+      .logo {
+        // Placeholder for logo
+        width: 32px;
+        height: 32px;
+        background-color: $primary-color;
+        border-radius: 50%;
+        cursor: pointer; // Make logo clickable
+        transition: transform 0.2s;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+
+      .collapseBtn {
+        background: none;
+        border: none;
+        color: $sidebar-text-muted;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        border-radius: 4px;
+        transition: color 0.2s, background-color 0.2s;
+
+        &:hover {
+          color: $sidebar-text;
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    .nav {
+      @extend %flex-column;
+      gap: 10px;
+
+      .navItem {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        color: $sidebar-text;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        &.active {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
+          color: $sidebar-text-muted;
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    .userProfile {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      // padding-top: 20px;
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #555;
+        @extend %flex-center; // Fix 3: Center avatar SVG
+        flex-shrink: 0;
+        
+        svg {
+          width: 20px;
+          height: 20px;
+          color: $sidebar-text;
+        }
+      }
+
+      .userName {
+        font-size: 14px;
+        color: $sidebar-text;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+  }
+
+  .mainContent {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2671&auto=format&fit=crop'); // Placeholder for background
+    background-size: cover;
+    background-position: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4); // Overlay
+      backdrop-filter: blur(2px);
+    }
+
+    .authCard {
+      position: relative;
+      z-index: 1;
+      background: rgba(30, 30, 30, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 40px;
+      width: 480px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      .title {
+        font-size: 24px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 30px;
+        color: $text-color;
+      }
+
+      .form {
+        @extend %flex-column;
+        gap: 16px;
+
+        .row {
+          display: flex;
+          gap: 16px;
+          
+          .inputGroup {
+            min-width: 0; // Fix 2: Prevent flex item overflow
+          }
+        }
+
+        .inputGroup {
+          flex: 1;
+          @extend %flex-column;
+
+          input {
+            width: 100%; // Fix 2: Ensure input takes full width of container
+            background-color: $input-bg;
+            border: 1px solid $input-border;
+            border-radius: 6px;
+            padding: 10px;
+            color: $text-color;
+            font-size: 14px;
+            outline: none;
+
+            &:focus {
+              border-color: $primary-color;
+            }
+            
+            &.error {
+              border-color: #ff4d4d;
+            }
+
+            &::placeholder {
+              color: #666;
+            }
+            
+            // Remove spinner for number input
+            &[type=number]::-webkit-inner-spin-button, 
+            &[type=number]::-webkit-outer-spin-button { 
+              -webkit-appearance: none; 
+              margin: 0; 
+            }
+          }
+          
+          .errorMessage {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-top: 4px;
+          }
+        }
+
+        .submitBtn {
+          background-color: $primary-color;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          padding: 14px;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+          margin-top: 10px;
+          transition: opacity 0.2s;
+
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+        color: #888;
+        font-size: 14px;
+
+        &::before,
+        &::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background-color: #444;
+        }
+
+        span {
+          padding: 0 10px;
+        }
+      }
+
+      .socialButtons {
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+
+        .socialBtn {
+          height: 60px;
+          flex:1;
+          border-radius: 8px;
+          background-color: #111;
+          border: 1px solid #333;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.2s;
+
+          &:hover {
+            background-color: #222;
+          }
+
+          img, svg {
+            width: 30px;
+            height: auto;
+            color: white; // Fix 1: Make icons white
+          }
+        }
+      }
+
+      .footer {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 14px;
+        color: #ffffffe1;
+
+        strong {
+          color: $text-color;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
