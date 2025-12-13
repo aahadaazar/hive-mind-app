@@ -1,4 +1,5 @@
 // Variables
+$breakpoint-mobile: 768px;
 $sidebar-width: 260px;
 $sidebar-bg: #1e1e1e; // Dark gray/black
 $sidebar-text: #e0e0e0;
@@ -7,7 +8,7 @@ $primary-color: #4a9d9c; // Teal/Greenish from button
 $input-bg: #2b2b2b;
 $input-border: #3e3e3e;
 $text-color: #ffffff;
-$font-family: 'Inter', sans-serif; // Assuming Inter or similar
+$font-family: "Inter", sans-serif;
 
 // Mixins/Placeholders
 %flex-center {
@@ -30,6 +31,23 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
   background-color: #000;
   color: $text-color;
 
+  // Backdrop for mobile
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90; // Below sidebar (100) but above everything else
+    backdrop-filter: blur(2px);
+    display: none; // Hidden by default
+
+    @media (max-width: $breakpoint-mobile) {
+      display: block;
+    }
+  }
+
   .sidebar {
     width: $sidebar-width;
     background-color: $sidebar-bg;
@@ -38,56 +56,44 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
     padding: 20px;
     border-right: 1px solid #333;
     flex-shrink: 0;
-    transition: width 0.3s ease;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+    overflow: hidden; // Prevent content overflow during transition
 
-    &.collapsed {
-      width: 80px;
-      align-items: center;
+    // Mobile specific styles
+    @media (max-width: $breakpoint-mobile) {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%); // Hidden by default
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: $sidebar-width !important; // Force full width on mobile drawer
+      border-right: none;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
 
-      .header {
-        justify-content: center;
-        flex-direction: column; // Keep it simple, just center the logo
-        gap: 0;
-        
-        .logo {
-          margin-bottom: 0;
-        }
-      }
-
-      .nav {
-        align-items: center;
-        
-        .navItem {
-          justify-content: center;
-          width: 40px;
-          height: 40px;
-          padding: 0;
-        }
-      }
-
-      .userProfile {
-        justify-content: center;
-        
-        .userName {
-          display: none;
-        }
+      &.mobileOpen {
+        transform: translateX(0); // Slide in
       }
     }
 
+    // Nav item transitions
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 40px;
+      min-height: 32px;
+      margin-left: 12px;
 
       .logo {
-        // Placeholder for logo
         width: 32px;
         height: 32px;
         background-color: $primary-color;
         border-radius: 50%;
-        cursor: pointer; // Make logo clickable
         transition: transform 0.2s;
+        flex-shrink: 0;
 
         &:hover {
           transform: scale(1.05);
@@ -105,6 +111,7 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
         padding: 4px;
         border-radius: 4px;
         transition: color 0.2s, background-color 0.2s;
+        flex-shrink: 0;
 
         &:hover {
           color: $sidebar-text;
@@ -118,9 +125,11 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
       }
     }
 
+    // Nav item transitions
     .nav {
       @extend %flex-column;
       gap: 10px;
+      margin-left: 8px;
 
       .navItem {
         display: flex;
@@ -130,10 +139,14 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
         color: $sidebar-text;
         text-decoration: none;
         border-radius: 8px;
-        transition: background-color 0.2s;
+        transition: background-color 0.2s,
+          padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         font-size: 14px;
         white-space: nowrap;
         overflow: hidden;
+        min-height: 40px;
+        min-width: 40px;
 
         &:hover {
           background-color: rgba(255, 255, 255, 0.1);
@@ -149,6 +162,14 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
           color: $sidebar-text-muted;
           flex-shrink: 0;
         }
+
+        .navText {
+          opacity: 1;
+          max-width: 200px;
+          transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          display: inline-block;
+        }
       }
     }
 
@@ -160,16 +181,16 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
       padding: 10px;
       border: 1px solid #333;
       border-radius: 10px;
-      // padding-top: 20px;
+      min-height: 54px;
 
       .avatar {
         width: 32px;
         height: 32px;
         border-radius: 50%;
         background-color: #555;
-        @extend %flex-center; // Fix 3: Center avatar SVG
+        @extend %flex-center;
         flex-shrink: 0;
-        
+
         svg {
           width: 20px;
           height: 20px;
@@ -182,6 +203,98 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
         color: $sidebar-text;
         white-space: nowrap;
         overflow: hidden;
+        opacity: 1;
+        max-width: 200px;
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+
+    // Collapsed specific styles
+    &.collapsed {
+      width: 80px;
+      padding: 20px 10px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+      @media (max-width: $breakpoint-mobile) {
+        width: $sidebar-width;
+        align-items: stretch;
+      }
+
+      .header {
+        gap: 12px;
+
+        @media (max-width: $breakpoint-mobile) {
+          flex-direction: row;
+          justify-content: space-between;
+          gap: 0;
+        }
+
+        .logo {
+          margin-bottom: 0;
+        }
+        .collapseBtn {
+          opacity: 0;
+          transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+      }
+
+      .nav {
+        // margin-left: 7px;
+        // transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+        @media (max-width: $breakpoint-mobile) {
+          align-items: stretch;
+        }
+
+        .navItem {
+          justify-content: flex-start;
+          padding: 10px;
+          gap: 0;
+
+          @media (max-width: $breakpoint-mobile) {
+            justify-content: flex-start;
+            width: auto;
+            height: auto;
+            padding: 10px;
+          }
+
+          .navText {
+            opacity: 0;
+            max-width: 0;
+            pointer-events: none;
+
+            @media (max-width: $breakpoint-mobile) {
+              opacity: 1;
+              max-width: 200px;
+              pointer-events: auto;
+            }
+          }
+        }
+      }
+
+      .userProfile {
+        justify-content: flex-start;
+        gap: 0;
+
+        @media (max-width: $breakpoint-mobile) {
+          justify-content: flex-start;
+        }
+
+        .userName {
+          opacity: 0;
+          max-width: 0;
+          // display: none; // REMOVED
+          pointer-events: none;
+
+          @media (max-width: $breakpoint-mobile) {
+            opacity: 1;
+            max-width: 200px;
+            // display: inline;
+            pointer-events: auto;
+          }
+        }
       }
     }
   }
@@ -192,18 +305,44 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2671&auto=format&fit=crop'); // Placeholder for background
+    background-image: url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2671&auto=format&fit=crop");
     background-size: cover;
     background-position: center;
 
+    .mobileMenuBtn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 50;
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px;
+      color: white;
+      cursor: pointer;
+      display: none; // Hidden on desktop
+      backdrop-filter: blur(4px);
+
+      @media (max-width: $breakpoint-mobile) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.4); // Overlay
+      background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(2px);
     }
 
@@ -216,7 +355,14 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
       padding: 40px;
       width: 480px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1); // Fixed border color variable reference if it was broken, but looks ok.
+      // Actually checking previous code it was rgba(255, 255, 255, 0.1) explicitly.
+
+      @media (max-width: $breakpoint-mobile) {
+        width: 90%;
+        padding: 24px;
+        max-width: 400px;
+      }
 
       .title {
         font-size: 24px;
@@ -224,6 +370,11 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
         text-align: center;
         margin-bottom: 30px;
         color: $text-color;
+
+        @media (max-width: $breakpoint-mobile) {
+          font-size: 20px;
+          margin-bottom: 24px;
+        }
       }
 
       .form {
@@ -233,9 +384,14 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
         .row {
           display: flex;
           gap: 16px;
-          
+
+          @media (max-width: $breakpoint-mobile) {
+            flex-direction: column;
+            gap: 16px;
+          }
+
           .inputGroup {
-            min-width: 0; // Fix 2: Prevent flex item overflow
+            min-width: 0;
           }
         }
 
@@ -244,7 +400,7 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
           @extend %flex-column;
 
           input {
-            width: 100%; // Fix 2: Ensure input takes full width of container
+            width: 100%;
             background-color: $input-bg;
             border: 1px solid $input-border;
             border-radius: 6px;
@@ -256,7 +412,7 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
             &:focus {
               border-color: $primary-color;
             }
-            
+
             &.error {
               border-color: #ff4d4d;
             }
@@ -264,15 +420,14 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
             &::placeholder {
               color: #666;
             }
-            
-            // Remove spinner for number input
-            &[type=number]::-webkit-inner-spin-button, 
-            &[type=number]::-webkit-outer-spin-button { 
-              -webkit-appearance: none; 
-              margin: 0; 
+
+            &[type="number"]::-webkit-inner-spin-button,
+            &[type="number"]::-webkit-outer-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
             }
           }
-          
+
           .errorMessage {
             color: #ff4d4d;
             font-size: 12px;
@@ -307,7 +462,7 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
 
         &::before,
         &::after {
-          content: '';
+          content: "";
           flex: 1;
           height: 1px;
           background-color: #444;
@@ -325,7 +480,7 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
 
         .socialBtn {
           height: 60px;
-          flex:1;
+          flex: 1;
           border-radius: 8px;
           background-color: #111;
           border: 1px solid #333;
@@ -339,10 +494,11 @@ $font-family: 'Inter', sans-serif; // Assuming Inter or similar
             background-color: #222;
           }
 
-          img, svg {
+          img,
+          svg {
             width: 30px;
             height: auto;
-            color: white; // Fix 1: Make icons white
+            color: white;
           }
         }
       }
