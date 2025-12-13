@@ -1,0 +1,39 @@
+$sidebar-text: #e0e0e0;
+
+.userProfile {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  min-height: 54px;
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: $sidebar-text;
+    }
+  }
+
+  .userName {
+    font-size: 14px;
+    color: $sidebar-text;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 200px;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

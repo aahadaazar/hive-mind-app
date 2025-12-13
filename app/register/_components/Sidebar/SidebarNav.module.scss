@@ -1,0 +1,48 @@
+$sidebar-text: #e0e0e0;
+$sidebar-text-muted: #a0a0a0;
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 8px;
+
+  .navItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    color: $sidebar-text;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s, padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    min-height: 40px;
+    min-width: 40px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: $sidebar-text-muted;
+      flex-shrink: 0;
+    }
+
+    .navText {
+      max-width: 200px;
+      transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-block;
+    }
+  }
+}

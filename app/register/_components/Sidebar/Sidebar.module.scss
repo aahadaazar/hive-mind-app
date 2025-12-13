@@ -1,0 +1,45 @@
+$breakpoint-mobile: 768px;
+$sidebar-width: 260px;
+$sidebar-bg: #1e1e1e;
+
+.sidebar {
+  width: $sidebar-width;
+  background-color: $sidebar-bg;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-right: 1px solid #333;
+  flex-shrink: 0;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  overflow: hidden;
+
+  @media (max-width: $breakpoint-mobile) {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: $sidebar-width !important;
+    border-right: none;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+
+    &.mobileOpen {
+      transform: translateX(0);
+    }
+  }
+
+  &.collapsed {
+    width: 80px;
+    padding: 20px 10px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (max-width: $breakpoint-mobile) {
+      width: $sidebar-width;
+      align-items: stretch;
+    }
+  }
+}

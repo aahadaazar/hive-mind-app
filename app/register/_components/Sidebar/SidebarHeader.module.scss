@@ -1,0 +1,48 @@
+$primary-color: #4a9d9c;
+$sidebar-text: #e0e0e0;
+$sidebar-text-muted: #a0a0a0;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  min-height: 32px;
+  margin-left: 12px;
+
+  .logo {
+    width: 32px;
+    height: 32px;
+    background-color: $primary-color;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .collapseBtn {
+    background: none;
+    border: none;
+    color: $sidebar-text-muted;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $sidebar-text;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
